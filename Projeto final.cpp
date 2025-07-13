@@ -10,7 +10,8 @@ class Pessoa{
 };
 
 class paciente : public Pessoa{
-    
+    string data_inicio;
+    string ultima_secao;
 };
 
 class psicologo : public Pessoa {
