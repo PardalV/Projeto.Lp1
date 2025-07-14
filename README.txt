@@ -8,3 +8,7 @@ Um sistema de gerenciamento de clínica/psicologo
 - Em cada paciente devemos ter: Nome e id, que já vem da classe pai, devemos ter um prontuario e um laudo, devemos ter um pessoa de rede de apoio
 
 - Para o polimorfismo vamos fazer uma função polimorfica de pessoa que expoe dados do paciente, do psicologo ou da rede de apoio
+
+FUNCIONAMENTO:
+- Pode servir para paciente ou para psicologos, você como paciente pode puxar os psicologogos da clinica, o local da clinica, se cadastrar e etc;
+- Como psicologo você pode se cadastrar, cadastrar pacientes e conseguir informações sobre os pacientes.
