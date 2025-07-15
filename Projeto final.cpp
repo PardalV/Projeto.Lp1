@@ -1,60 +1,139 @@
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 
-class clinica {
-    string nome;
-    int CEP;
-    
+class sala {
+	int numero_sala;
 };
 
-class sala {
-    int numero_sala;
-}
-
-class Pessoa{
-    string nome;
-    string id;
-    
-    
+class Pessoa {
+    public:
+    	string nome;
+    	int id;
 };
 
 class prontuario {
-    string desenvolvimento;
-    string ultima_atulizacao;
+	string desenvolvimento;
+	string ultima_atulizacao;
 };
 
 class laudo {
-    string conclusao;
-    string DSM;
-    string medico;
-    int CRM;
+	string conclusao;
+	string DSM;
+	string medico;
+	int CRM;
 };
 
 class apoio : public Pessoa {
-    int telefone;
-    string relacao;
+	int telefone;
+	string relacao;
 };
 
 
 
 class psicologo : public Pessoa {
-    
+    int CRP;
+    sala sala_de_atendimento;
+    public:
+    	void cadastro_psi(string nome, int id){
+    	    this->nome = nome;
+    	    this->id = id;
+    	}
+    	
+
 };
 
-class paciente : public Pessoa{
-    string data_inicio;
-    string ultima_secao;
-    prontuario pront;
-    laudo lau;
-    apoio apo;
+class paciente : public Pessoa {
+	string data_inicio;
+	string ultima_secao;
+	prontuario pront;
+	laudo lau;
+	apoio apo;
 };
+
+class clinica {
+	string nome;
+	string local;
+	int CEP;
+	string dono;
+	vector<sala> salas_clinica;
+	vector<psicologo> psi_clinica;
+public:
+	void cadastrarNome(string nome) {
+		this->nome = nome;
+	}
+	void cadastrarLocal(string local) {
+		this->local = local;
+	}
+	void cadastrarCep(int CEP) {
+		this->CEP = CEP;
+	}
+	void cadastrarDono(string dono) {
+		this->dono = dono;
+	}
+	void printarClinica() {
+		cout << "Nome da clínica: " << nome << endl;
+		cout << "Edenreço da clínica: " << local << endl;
+		cout << "CEP da clínica: " << CEP << endl;
+		cout << "Dono da clínica: " << dono << endl;
+	}
+	void add_psi(string nome, int id){
+	    psicologo new_psi;
+	    new_psi.cadastro_psi(nome, id);
+	    psi_clinica.push_back(new_psi);
+	}
+	void print_psi(){
+	    for (int i = 0; i < psi_clinica.size(); i++){
+	        cout << "Nome:" << psi_clinica[i].nome << endl;
+	        cout << "Id:" << psi_clinica[i].id << endl;
+	    }
+	} 
+    void add_sala(int quant_sala){
+        for (int i = 0; i < quant_sala; i ++){
+            sala new_sala;
+            cout << "Informe o numero da sala " << i + 1 << ": ";
+            int numero;
+            cin >> numero;
+            
+        }
+    }
+};
+
 
 
 int main()
 {
-    std::cout<<"Hello World";
+	clinica um;
+	cout << "Bem-vindo ao sistema de gerenciamento !\nPrimenramente vamos cadastrar sua clínica" << endl;
+	cout << "Informe o nome da clínica: ";
+	string nome_clinica;
+	cin.ignore();
+	getline(cin, nome_clinica);
+	um.cadastrarNome(nome_clinica);
+	
+	cout << "Informe o endereço: ";
+	string endereco_clinica;
+	cin.ignore();
+	getline(cin, endereco_clinica);
+	um.cadastrarLocal(endereco_clinica);
+	
+	cout << "Informe o CEP: ";
+	int cep_clinica;
+	cin >> cep_clinica;
+	um.cadastrarCep(cep_clinica);
+	
+	cout << "Informe o nome do dono: ";
+	string nome_dono;
+    cin.ignore();
+    getline(cin, nome_dono);
+	um.cadastrarDono(nome_dono);
+	
+    cout << "Está na hora de cadastrar as salas de sua clínica !" << endl << "Informe quantas salas tem sua clínica: ";
+    
 
-    return 0;
+
+
+	return 0;
 }
