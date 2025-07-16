@@ -6,6 +6,13 @@ using namespace std;
 
 class sala {
 	int numero_sala;
+	public:
+	    void def_num(int numero_sala){
+	        this-> numero_sala = numero_sala;
+	    }
+	    void print_sala(){
+	        cout << numero_sala;
+	    }
 };
 
 class Pessoa {
@@ -37,7 +44,7 @@ class psicologo : public Pessoa {
     int CRP;
     sala sala_de_atendimento;
     public:
-    	void cadastro_psi(string nome, int id){
+        void cadastro_psi(string nome, int id){
     	    this->nome = nome;
     	    this->id = id;
     	}
@@ -92,11 +99,19 @@ public:
 	} 
     void add_sala(int quant_sala){
         for (int i = 0; i < quant_sala; i ++){
-            sala new_sala;
             cout << "Informe o numero da sala " << i + 1 << ": ";
             int numero;
             cin >> numero;
-            
+            sala new_sala;
+            new_sala.def_num(numero);
+            salas_clinica.push_back(new_sala);
+        }
+    }
+    void informe_sala(){
+        for(int i = 0; i < salas_clinica.size(); i ++){
+            cout << "Sala numéro: ";
+            salas_clinica[i].print_sala();
+            cout << endl;
         }
     }
 };
@@ -106,6 +121,8 @@ public:
 int main()
 {
 	clinica um;
+	//Parte 1 - Cadastro da clínica a ideia é que depois coloquemos um predefinido pra não ter que cadastrar sempre
+	
 	cout << "Bem-vindo ao sistema de gerenciamento !\nPrimenramente vamos cadastrar sua clínica" << endl;
 	cout << "Informe o nome da clínica: ";
 	string nome_clinica;
@@ -131,7 +148,12 @@ int main()
 	um.cadastrarDono(nome_dono);
 	
     cout << "Está na hora de cadastrar as salas de sua clínica !" << endl << "Informe quantas salas tem sua clínica: ";
+    int num_sala;
+    cin >> num_sala;
+    um.add_sala(num_sala);
+    um.informe_sala();
     
+    //Parte 2 - Funcionamento para o cliente/Psicologo podendo cadasatrar varias informações 
 
 
 
