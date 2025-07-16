@@ -48,6 +48,10 @@ class prontuario {
 	            }
 	        }
 	    }
+	    void att_primeira(string primeira_secao, string primeira_data){
+	        desenvolvimento = primeira_data + "\n" + primeira_secao; 
+	        
+	    }
 };
 
 class laudo {
@@ -60,12 +64,24 @@ class laudo {
 	        cout << "Médico resposável: " << medico << "(CRM: " << CRM << ")" << endl;
 	        cout << "DSM: " << DSM << endl << conclusao << endl;
 	    }
+	    void setMedico(string medico, int CRM){
+	        this->medico = medico;
+	        this-> CRM = CRM;
+	    }
+	    void setConclusao(string conclusao, string DSM){
+	        this->conclusao = conclusao;
+	        this->DSM = DSM;
+	    }
 };
 
 class apoio : public Pessoa {
-	int telefone;
-	string relacao;
 	public:
+    	int telefone;
+    	string relacao;	
+    	void set_dados(int telefone, string relacao){
+    	    this->telefone = telefone;
+    	    this->relacao = relacao;
+    	}
 	    void print_apoio(){
 	        cout << "Nome: " << nome << endl << "Relação: " << relacao << endl << "Telefone: " << telefone << endl; 
 	    }
@@ -74,11 +90,17 @@ class apoio : public Pessoa {
 class paciente : public Pessoa {
 	string data_inicio;
 	string ultima_secao;
-	int idade;
 	prontuario pront;
 	laudo lau;
 	vector<apoio> apo;
 	public:
+	    int idade;
+	    void addApo(string nome_apoio, int telefone, string relacao){
+	        apoio new_apoio;
+	        new_apoio.nome = nome_apoio;
+	        new_apoio.set_dados(int telefone, string relacao);
+	        apo.push_back(new_apoio);
+	    }
 	    void func(){
 	        int escolha = 0;
 	        while(escolha != 5){
@@ -100,6 +122,21 @@ class paciente : public Pessoa {
 	        }
 
 	    }
+	  void setData_inicio(string data_inicio){
+	      this->data_inicio = data_inicio;
+	  }
+	  void setData_atual(string ultima_secao){
+	      this->ultima_secao = ultima_secao;
+	  }
+	  void setLauMedico(string medico, int CRM){
+	      lau.setMedico(medico, CRM);
+	  }
+	  void setLauConclusao(string conclusao, string DSM){
+	      lau.setConclusao(conclusao, DSM);
+	  }
+	  void prontAttPrimeira(string primeira_secao, string primeira_data){
+	      pront.att_primeira(primeira_secao, primeira_data);
+	  }
 };
 
 class psicologo : public Pessoa {
@@ -145,6 +182,82 @@ class psicologo : public Pessoa {
     	            cin.ignore();
                     getline(cin, nome_cliente);
     	            procurar_cliente(nome_cliente);
+    	        } else if (escolha == 3){
+    	            paciente novo_cliente;
+    	            cout << "Informe o nome do novo cliente: ";
+    	            cin.ignore();
+    	            getline(cin, novo_cliente.nome);
+    	            cout << "Informe a idade do cliente: ";
+    	            cin >> novo_cliente.idade;
+    	            cout << "Informe a data da primeira seção: ";
+    	            cin.ignore();
+    	            string data_cliente;
+    	            getline(cin, data_cliente);
+    	            novo_cliente.setData_inicio(data_cliente);
+    	            novo_cliente.setData_atual(data_cliente);
+    	            cout << "O cliente tem algum laudo ? (S/n)";
+    	            char escolha;
+    	            cin.ignore();
+    	            escolha = getchar();
+    	            if(escolha == 'S'){
+    	                cout << "Informe o nome do médico que deu o laudo: ";
+    	                cin.ignore();
+    	                string dados_laudo;
+    	                getline(cin, dados_laudo);
+    	                int CRM;
+    	                cout << "Informe o CRM do médico: ";
+    	                cin >> CRM;
+    	                novo_cliente.setLauMedico(dados_laudo, CRM);
+    	                cout << "Informe a conclusão médica: ";
+    	                cin.ignore();
+    	                getline(cin, dados_laudo);
+    	                cout << "Informe o código do DSM: ";
+    	                string DSM;
+    	                cin.ignore();
+    	                getline(cin, DSM);
+    	                novo_cliente.setLauConclusao(dados_laudo, DSM);
+    	            }
+    	           cout << "Informe o prontuario da primeira seção: ";
+    	           cin.ignore();
+    	           string laudo_inicio;
+    	           getline(cin, laudo_inicio);
+    	           novo_cliente.prontAttPrimeira(laudo_inicio,data_cliente);
+    	           cout << "Informe o nome de uma pessoa para rede de apoio: ";
+    	           cin.ignore();
+    	           string nome_apoio;
+    	           getline(cin, nome_apoio);
+    	           cout << "Informe a relação do requerido com o cliente: ";
+    	           string relacao_apoio;
+    	           cin.ignore();
+    	           getline(cin, relacao_apoio);
+    	           cout << "Informe o telefone do requerido: ";
+    	           int telefone_apoio;
+    	           cin >> telefone_apoio;
+    	           novo_cliente.addApo(nome_apoio, telefone_apoio, relacao_apoio);
+    	           cout << "Cliente cadastado";
+    	        }
+    	        else if(escolha == 4){
+    	            cout << "Informe o nome do cliente: ";
+    	            string cliente_delet;
+    	            cin.ignore();
+    	            getline(cin, cliente_delet);
+    	            for (int i = 0; i < clientes.size(); i ++){
+    	                int achou = 0;
+    	                if (cliente_delet == clientes[i].nome){
+    	                    int tam_aux = 1 - clientes.size();
+    	                    paciente cliente_aux;
+    	                    cliente_aux = clientes[i];
+    	                    clientes[i] = clientes[tam_aux];
+    	                    clientes[tam_aux] = cliente_aux;
+    	                    clientes.pop_back();
+    	                    achou = 1;
+    	                }
+    	                if(achou = 1){
+    	                    cout << "Cliente removido !!" << endl;
+    	                } else {
+    	                    cout << "Cliente não encontrado" << endl;
+    	                }
+    	            }
     	        }
     	    }
     	}
@@ -280,17 +393,22 @@ int main()
                 um.print_psi();
             }
         } else if(escolha_1 == 2){
-            cout << "Qual ação você deseja realizar ?" << endl << "1 - Já sou cadastrado" << endl << "2 - Me cadastrar" << endl << "3 - Desejo cancelar meu cadastro" << endl;
+            cout << "Qual ação você deseja realizar ?" << endl << "1 - Já sou cadastrado" << endl << "2 - Me cadastrar" << endl << "3 - Desejo cancelar meu cadastro" << endl << "4 - Voltar" << endl;
             int escolha_3 = 0;
             cin >> escolha_3;
-            //aplica um while
-            if (escolha_3 == 1){
+            while(escolha_3 != 4){
+                if (escolha_3 == 1){
                 cout << "Informe o seu nome: ";
                 string nome_psi;
                 cin.ignore();
 	            getline(cin, nome_psi);
 	            um.login_psi(nome_psi);
+                }
+                if (escolha_3 == 2){
+                    
+                }
             }
+
         }
     }
 
