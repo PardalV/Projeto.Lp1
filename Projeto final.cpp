@@ -5,13 +5,16 @@ using namespace std;
 
 
 class sala {
-	int numero_sala;
+	int disponibilidade = 0;
 	public:
+	    int numero_sala;
 	    void def_num(int numero_sala){
 	        this-> numero_sala = numero_sala;
 	    }
 	    void print_sala(){
-	        cout << numero_sala;
+	        if(disponibilidade == 0){
+	            cout << numero_sala;
+	        }
 	    }
 };
 
@@ -98,7 +101,7 @@ class paciente : public Pessoa {
 	    void addApo(string nome_apoio, int telefone, string relacao){
 	        apoio new_apoio;
 	        new_apoio.nome = nome_apoio;
-	        new_apoio.set_dados(int telefone, string relacao);
+	        new_apoio.set_dados(telefone, relacao);
 	        apo.push_back(new_apoio);
 	    }
 	    void func(){
@@ -144,9 +147,12 @@ class psicologo : public Pessoa {
     sala sala_de_atendimento;
     vector<paciente> clientes;
     public:
-        void cadastro_psi(string nome, int id){
+        void setSala(sala sala_de_atendimento){
+            this->sala_de_atendimento = sala_de_atendimento;
+        }
+        void cadastro_psi(string nome, int CRP){
     	    this->nome = nome;
-    	    this->id = id;
+    	    this->CRP = CRP;
     	}
     	void print_CRP(){
     	    cout << CRP << endl;
@@ -173,7 +179,8 @@ class psicologo : public Pessoa {
     	    int escolha = 0;
     	    while(escolha != 5){
     	        cout << "O que deseja fazer ?!" << endl;
-    	        cout << "1 - Listar pacientes" << endl << "2 - Procurar paciente" << endl << "3 - Adcionar paciente" << endl << "4 - Remover pacientes" << endl << "5 - Sair" << endl;
+    	        cout << "1 - Listar pacientes" << endl << "2 - Procurar cliente" << endl << "3 - Adcionar cliente" << endl << "4 - Remover cliente" << endl << "5 - Sair" << endl;
+    	        cin >> escolha;
     	        if (escolha == 1){
     	            list_clientes();
     	        } else if (escolha == 2){
@@ -234,6 +241,7 @@ class psicologo : public Pessoa {
     	           int telefone_apoio;
     	           cin >> telefone_apoio;
     	           novo_cliente.addApo(nome_apoio, telefone_apoio, relacao_apoio);
+    	           clientes.push_back(novo_cliente);
     	           cout << "Cliente cadastado";
     	        }
     	        else if(escolha == 4){
@@ -294,11 +302,6 @@ public:
 	void print_nome(){
 	    cout << nome;
 	}
-	void add_psi(string nome, int id){
-	    psicologo new_psi;
-	    new_psi.cadastro_psi(nome, id);
-	    psi_clinica.push_back(new_psi);
-	}
 	void print_psi(){
 	    cout << "Psicologos da clínica:" << endl;
 	    for (int i = 0; i < psi_clinica.size(); i++){
@@ -326,13 +329,30 @@ public:
             salas_clinica.push_back(new_sala);
         }
     }
-    void informe_sala(){
+    sala informe_sala(){
         for(int i = 0; i < salas_clinica.size(); i ++){
             cout << "Sala numéro: ";
             salas_clinica[i].print_sala();
             cout << endl;
         }
+        cout << "Escolha uma sala: ";
+        int esc_sala;
+        cin >> esc_sala;
+        for (int i = 0; i < salas_clinica.size(); i ++){
+            if (esc_sala = salas_clinica[i].numero_sala){
+                return salas_clinica[i];
+            }
+        }
+    return salas_clinica[1];
     }
+    void add_psi(string nome, int CRP){
+	    psicologo new_psi;
+	    new_psi.cadastro_psi(nome, CRP);
+	    sala aux_sala = informe_sala();
+	    new_psi.setSala(aux_sala);
+	    psi_clinica.push_back(new_psi);
+	}
+
 };
 
 
@@ -345,13 +365,12 @@ int main()
 	cout << "Bem-vindo ao sistema de gerenciamento !\nPrimenramente vamos cadastrar sua clínica" << endl;
 	cout << "Informe o nome da clínica: ";
 	string nome_clinica;
-	cin.ignore();
 	getline(cin, nome_clinica);
 	um.cadastrarNome(nome_clinica);
 	
 	cout << "Informe o endereço: ";
 	string endereco_clinica;
-	cin.ignore();
+	
 	getline(cin, endereco_clinica);
 	um.cadastrarLocal(endereco_clinica);
 	
@@ -370,14 +389,13 @@ int main()
     int num_sala;
     cin >> num_sala;
     um.add_sala(num_sala);
-    um.informe_sala();
     
     //Parte 2 - Funcionamento para o cliente/Psicologo podendo cadasatrar varias informações 
     
 
     int escolha_1 = 0;
     
-    while (escolha_1 != 4){
+    while (escolha_1 != 5){
         cout << "Sistema da clínica ";
         um.print_nome(); 
         cout << "!" << endl << "Qual ação deseja realizar ?" << endl;
@@ -393,10 +411,10 @@ int main()
                 um.print_psi();
             }
         } else if(escolha_1 == 2){
-            cout << "Qual ação você deseja realizar ?" << endl << "1 - Já sou cadastrado" << endl << "2 - Me cadastrar" << endl << "3 - Desejo cancelar meu cadastro" << endl << "4 - Voltar" << endl;
             int escolha_3 = 0;
-            cin >> escolha_3;
             while(escolha_3 != 4){
+                cout << "Qual ação você deseja realizar ?" << endl << "1 - Já sou cadastrado" << endl << "2 - Me cadastrar" << endl << "3 - Desejo cancelar meu cadastro" << endl << "4 - Voltar" << endl;
+                cin >> escolha_3;    
                 if (escolha_3 == 1){
                 cout << "Informe o seu nome: ";
                 string nome_psi;
@@ -405,8 +423,21 @@ int main()
 	            um.login_psi(nome_psi);
                 }
                 if (escolha_3 == 2){
+                    cout << "Informe o seu nome: ";
+                    string novo_nome;
+                    cin.ignore();
+                    getline(cin, novo_nome);
+                    cout << "Informe o seu CRP: ";
+                    int novo_crp;
+                    cin >> novo_crp;
+                    cout << "Informe uma sala para você, essas são as disponíveis: " << endl;
+                    um.add_psi(novo_nome, novo_crp);
                     
+                    cout << "Psicologo cadastrado !";
                 }
+                if (escolha_3 == 3) {
+                }
+                    
             }
 
         }
