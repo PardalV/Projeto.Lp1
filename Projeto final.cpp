@@ -24,6 +24,30 @@ class Pessoa {
 class prontuario {
 	string desenvolvimento;
 	string ultima_atulizacao;
+	public:
+	    void print_prontuario(){
+	        cout << "Ultima atualização: " << ultima_atulizacao << endl;
+	        cout << "Prontuario: " << endl << desenvolvimento << endl;
+	    }
+	    void att(){
+	        int escolha = 0;
+	        while(escolha != 3){
+	            cout << "Ações:" << endl << "1 - Ver prontuario" << endl << "2 - Atualizar Prontuario" << endl << "3 - Voltar";	  
+	            cin >> escolha;
+	            if(escolha == 1){
+	                print_prontuario();
+	            } else if(escolha == 2){
+	                cout << "Informe a data de hoje: ";
+	                cin.ignore();
+	                getline(cin, ultima_atulizacao);
+	                cout << "Escreva as atualizações: " << endl;
+	                cin.ignore();
+	                string att;
+	                getline(cin, att);
+	                desenvolvimento = desenvolvimento + "\n" + "\n" + ultima_atulizacao + "\n" + att;
+	            }
+	        }
+	    }
 };
 
 class laudo {
@@ -31,14 +55,52 @@ class laudo {
 	string DSM;
 	string medico;
 	int CRM;
+	public:
+	    void print_laudo(){
+	        cout << "Médico resposável: " << medico << "(CRM: " << CRM << ")" << endl;
+	        cout << "DSM: " << DSM << endl << conclusao << endl;
+	    }
 };
 
 class apoio : public Pessoa {
 	int telefone;
 	string relacao;
+	public:
+	    void print_apoio(){
+	        cout << "Nome: " << nome << endl << "Relação: " << relacao << endl << "Telefone: " << telefone << endl; 
+	    }
 };
 
+class paciente : public Pessoa {
+	string data_inicio;
+	string ultima_secao;
+	int idade;
+	prontuario pront;
+	laudo lau;
+	vector<apoio> apo;
+	public:
+	    void func(){
+	        int escolha = 0;
+	        while(escolha != 5){
+	            cout << "Ações:" << endl;
+	            cout << "1 - Informações" << endl <<"2 - Prontuario" << endl << "3 - Informações de Laudo" << endl << "4 - Consultar rede de apoio" << endl << "5 - Voltar";	     
+	            cin >> escolha;
+	            if (escolha == 1){
+	                cout << "Nome: " << nome << endl << "Idade: " << idade << endl << "Primeira seção: " << data_inicio << endl << "Ultima seção cadastada: " << ultima_secao << endl;
+	            } else if (escolha == 2){
+	                pront.att();
+	            } else if (escolha == 3){
+	                lau.print_laudo();
+	            }
+	            else if(escolha == 4) {
+	                for (int i = 0; i < apo.size(); i ++){
+	                    apo[i].print_apoio();
+	                }
+	            }
+	        }
 
+	    }
+};
 
 class psicologo : public Pessoa {
     int CRP;
@@ -52,19 +114,42 @@ class psicologo : public Pessoa {
     	void print_CRP(){
     	    cout << CRP << endl;
     	}
+    	void list_clientes(){
+    	    cout << "Clientes: ";
+    	    for(int i = 0; i < clientes.size(); i ++){
+    	        cout <<clientes[i].nome << endl;
+    	    }
+    	}
+    	
+    	void procurar_cliente(string nome_cliente){
+    	    for(int i = 0; i < clientes.size(); i++){
+    	        if(clientes[i].nome == nome_cliente){
+    	            clientes[i].func();
+    	            break;
+    	        }
+    	    }
+    	    cout << "Cliente não encontrado" << endl;
+    	}
+    	
     	void gestao(){
-    	    
+    	    cout << "Bem-vindo " << nome << "!" << endl ;
+    	    int escolha = 0;
+    	    while(escolha != 5){
+    	        cout << "O que deseja fazer ?!" << endl;
+    	        cout << "1 - Listar pacientes" << endl << "2 - Procurar paciente" << endl << "3 - Adcionar paciente" << endl << "4 - Remover pacientes" << endl << "5 - Sair" << endl;
+    	        if (escolha == 1){
+    	            list_clientes();
+    	        } else if (escolha == 2){
+    	            cout << "Informe o nome do cliente: ";
+    	            string nome_cliente;
+    	            cin.ignore();
+                    getline(cin, nome_cliente);
+    	            procurar_cliente(nome_cliente);
+    	        }
+    	    }
     	}
     	
 
-};
-
-class paciente : public Pessoa {
-	string data_inicio;
-	string ultima_secao;
-	prontuario pront;
-	laudo lau;
-	apoio apo;
 };
 
 class clinica {
@@ -180,7 +265,9 @@ int main()
     int escolha_1 = 0;
     
     while (escolha_1 != 4){
-        cout << "Sistema da clínica " << um.print_nome() << "!" << endl << "Qual ação deseja realizar ?" << endl;
+        cout << "Sistema da clínica ";
+        um.print_nome(); 
+        cout << "!" << endl << "Qual ação deseja realizar ?" << endl;
         cout << "1 - Informações" << endl << "2 - Sou psicologo" << endl << "3 - Sou cliente" << endl << "4 - Sou administrador" << endl << "5 - Sair" << endl;   
         cin >> escolha_1;
         if(escolha_1 == 1){
