@@ -44,7 +44,6 @@ class prontuario {
 	                cin.ignore();
 	                getline(cin, ultima_atulizacao);
 	                cout << "Escreva as atualizações: " << endl;
-	                cin.ignore();
 	                string att;
 	                getline(cin, att);
 	                desenvolvimento = desenvolvimento + "\n" + "\n" + ultima_atulizacao + "\n" + att;
@@ -225,17 +224,14 @@ class psicologo : public Pessoa {
     	                novo_cliente.setLauConclusao(dados_laudo, DSM);
     	            }
     	           cout << "Informe o prontuario da primeira seção: ";
-    	           cin.ignore();
     	           string laudo_inicio;
     	           getline(cin, laudo_inicio);
     	           novo_cliente.prontAttPrimeira(laudo_inicio,data_cliente);
     	           cout << "Informe o nome de uma pessoa para rede de apoio: ";
-    	           cin.ignore();
     	           string nome_apoio;
     	           getline(cin, nome_apoio);
     	           cout << "Informe a relação do requerido com o cliente: ";
     	           string relacao_apoio;
-    	           cin.ignore();
     	           getline(cin, relacao_apoio);
     	           cout << "Informe o telefone do requerido: ";
     	           int telefone_apoio;
@@ -252,7 +248,7 @@ class psicologo : public Pessoa {
     	            for (int i = 0; i < clientes.size(); i ++){
     	                int achou = 0;
     	                if (cliente_delet == clientes[i].nome){
-    	                    int tam_aux = 1 - clientes.size();
+    	                    int tam_aux = clientes.size() - 1;
     	                    paciente cliente_aux;
     	                    cliente_aux = clientes[i];
     	                    clientes[i] = clientes[tam_aux];
@@ -352,6 +348,27 @@ public:
 	    new_psi.setSala(aux_sala);
 	    psi_clinica.push_back(new_psi);
 	}
+	void deletePsi(string nome){
+	    for (int i = 0; i < psi_clinica.size(); i++){
+	        if (nome == psi_clinica[i].nome){
+	            int tam_aux = psi_clinica.size() - 1;
+	            psicologo aux_psi = psi_clinica[i];
+	            psi_clinica[i] = psi_clinica[tam_aux];
+	            psi_clinica[tam_aux] = aux_psi;
+	            psi_clinica.pop_back();
+	        }
+	    }
+	}
+	void acessPsi(string psi_nome, string cliente_nome){
+	    for (int i = 0; i < psi_clinica.size(); i ++){
+	        if (psi_clinica[i].nome == psi_nome){
+	            psi_clinica[i].procurar_cliente(cliente_nome);
+	        }
+	    }
+	}
+	~clinica(){
+	    cout << "Destrutor chamado" << endl;
+	}
 
 };
 
@@ -436,10 +453,53 @@ int main()
                     cout << "Psicologo cadastrado !";
                 }
                 if (escolha_3 == 3) {
+                    cout << "Informe o seu nome: ";
+                    string nome_delete;
+                    cin.ignore();
+                    getline(cin, nome_delete);
+                    um.deletePsi(nome_delete);
                 }
                     
             }
 
+        } else if(escolha_1 == 3) {
+            int escolha_4 = 0;
+            string nome_cliente;
+            string nome_psics;
+            cout << "Informe seu nome:";
+            cin.ignore();
+            getline(cin, nome_cliente);
+            cout << "Informe o nome do seu Piscologo: ";
+            cin.ignore();
+            getline(cin, nome_psics);
+            while (escolha_4 != 2){
+                cout << "Qual ação deseja realizar ?" << endl << "1 - Acessar meus dados" << endl << "2 - Voltar" << endl;
+                cin >> escolha_4;
+                if (escolha_4 == 1){
+                    um.acessPsi(nome_psics, nome_cliente);
+                }
+            }
+        } else if(escolha_1 == 4){
+            cout << "Informe a senha do administrador: ";
+            int senha;
+            cin >> senha;
+            if (senha == 59152){
+                cout << "Qual ação deseja realizar ?" << endl << "1 - Adicionar salas" << endl << "2 - Apagar clínica" << endl;
+                int escolha_5;
+                cin >> escolha_5;
+                if (escolha_5 == 1){
+                    cout << "Informe quantas salas deseja adicionar: ";
+                    int new_sala;
+                    cin >> new_sala;
+                    um.add_sala(new_sala);
+                } else if (escolha_5 == 2){
+                    //delete um;
+                }
+            } else {
+                cout << "Senha incorreta, aperte qualquer tecla para retornar";
+                string voltar;
+                getline(cin, voltar);
+            }
         }
     }
 
